@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hm.mcshared</groupId>
 	<artifactId>MCShared</artifactId>
-	<version>1.1.8</version>
+	<version>1.1.9</version>
 	<packaging>jar</packaging>
 	<name>MCShared</name>
 	<url>https://github.com/PyvesB/MCShared</url>
 	<description>A small library containing common functionnality for Minecraft plugins.</description>
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/PyvesB/MCShared/issues</url>
+		<url>https://github.com/Sidpatchy/MCShared/issues</url>
 	</issueManagement>
 	<distributionManagement>
 		<repository>
@@ -56,7 +56,7 @@
 					</includes>
 					<merge>true</merge>
 					<repositoryName>MCShared</repositoryName>
-					<repositoryOwner>PyvesB</repositoryOwner>
+					<repositoryOwner>Sidpatchy</repositoryOwner>
 				</configuration>
 				<executions>
 					<execution>
@@ -93,6 +93,20 @@
 				<groupId>com.github.shadowjonathan</groupId>
 				<artifactId>ParticleEffect</artifactId>
 				<version>1.7.1</version>
+			</dependency>
+			<dependency>
+				<groupId>net.md-5</groupId>
+				<artifactId>bungeecord-api</artifactId>
+				<version>1.16-R0.5-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.md-5</groupId>
+				<artifactId>bungeecord-api</artifactId>
+				<version>1.16-R0.5-SNAPSHOT</version>
+				<type>javadoc</type>
+				<scope>provided</scope>
 			</dependency>
 	</dependencies>
 </project>
