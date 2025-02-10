@@ -22,7 +22,7 @@ import static java.lang.Integer.parseInt;
  *
  */
 public final class FancyMessageSender {
-	private static final int MAJOR_VERSION_NUMBER = parseInt(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[1]);
+	private static final int MAJOR_VERSION_NUMBER = Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
 
 	private FancyMessageSender() {
 		// Not called.
