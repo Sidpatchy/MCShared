@@ -1,0 +1,18 @@
+# Compiled source #
+*.class
+
+# Eclipse files #
+.settings
+.classpath
+.project
+
+# ItelliJ files #
+.idea
+/MCShared.iml
+/shelf/
+/workspace.xml
+
+# Target jars #
+target
+
+dependency-reduced-pom.xml
