@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
+import java.lang.reflect.Method;
+
 import static java.lang.Integer.parseInt;
 
 /**
@@ -85,19 +87,48 @@ public final class FancyMessageSender {
 	}
 
 	/**
-	 * Sends a title and subtitle to the player. Only supported in Minecraft 1.8+.
+	 * Sends a title and subtitle to the player. Supports Minecraft 1.8+ with fallbacks for different API versions.
 	 *
 	 * @param player   Online player to send the title and subtitle to.
 	 * @param title    The main text that will appear on the player's screen.
 	 * @param subtitle The secondary text that will appear on the player's screen.
-	 * @throws Exception
 	 */
 	@SuppressWarnings("deprecation")
-	public static void sendTitle(Player player, String title, String subtitle) throws Exception {
-		if (MAJOR_VERSION_NUMBER >= 11) {
-			player.sendTitle(title, subtitle, 10, 70, 20);
-		} else if (MAJOR_VERSION_NUMBER >= 8) {
-			player.sendTitle(title, subtitle);
+	public static void sendTitle(Player player, String title, String subtitle) {
+		// Ensure non-null values
+		title = title != null ? title : "";
+		subtitle = subtitle != null ? subtitle : "";
+
+		try {
+			if (MAJOR_VERSION_NUMBER >= 11) {
+				// Modern versions with full timing support
+				player.sendTitle(title, subtitle, 10, 70, 20);
+			} else if (MAJOR_VERSION_NUMBER >= 8) {
+				// 1.8-1.10 support
+				player.sendTitle(title, subtitle);
+			}
+			// Versions below 1.8 will silently fail as they don't support titles
+		} catch (NoSuchMethodError e) {
+			// Fallback for Paper's new API if available
+			try {
+				Class.forName("net.kyori.adventure.title.Title");
+				// If we reach here, we're on Paper with Adventure API
+				// We need to use reflection here to avoid direct Adventure API dependencies
+				Method showTitleMethod = player.getClass().getMethod("showTitle", Class.forName("net.kyori.adventure.title.Title"));
+				Object titleComponent = Class.forName("net.kyori.adventure.text.Component").getMethod("text", String.class).invoke(null, title);
+				Object subtitleComponent = Class.forName("net.kyori.adventure.text.Component").getMethod("text", String.class).invoke(null, subtitle);
+				Object titleObject = Class.forName("net.kyori.adventure.title.Title").getMethod("title",
+								Class.forName("net.kyori.adventure.text.Component"),
+								Class.forName("net.kyori.adventure.text.Component"))
+						.invoke(null, titleComponent, subtitleComponent);
+				showTitleMethod.invoke(player, titleObject);
+			} catch (Exception ignored) {
+				// If all else fails, fall back to chat messages
+				player.sendMessage(title);
+				if (!subtitle.isEmpty()) {
+					player.sendMessage(subtitle);
+				}
+			}
 		}
 	}
 }
